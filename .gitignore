@@ -1,0 +1,27 @@
+# IDE files
+.idea*
+.vscode*
+
+#configs
+*.env
+
+#binary
+/build
+golangci-lint
+migrate-cli
+
+#logs
+.log*
+
+#vendor
+/vendor
+
+# generated files
+/internal/delivery/gql/schemas/schema.graphql
+/internal/delivery/gql/generated.go
+
+# sql
+dump.sql
+
+# misc
+cheatsheet.txt

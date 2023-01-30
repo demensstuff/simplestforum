@@ -1,0 +1,101 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+enum UserLevel {
+    NONE
+    MOD
+    ADMIN
+}
+
+enum UserRestriction {
+    NONE
+    BANNED
+    READONLY
+}
+
+enum UserSortBy {
+    RANK
+    COUNT_POSTS
+    COUNT_TOPICS
+    CREATED_AT
+}
+
+type User {
+    id: Int!
+    nickname: String!
+    show_info: Boolean!
+    rank: Int!
+    level: UserLevel!
+    restriction: UserRestriction!
+    user_info: UserInfo
+    count_topics: Int
+    count_posts: Int
+    topics: [Topic]
+    posts: [Post]
+    created_at: Time!
+    updated_at: Time!
+}
+
+type UserInfo {
+    phone: String
+    email: String
+    first_name: String
+    last_name: String
+}
+
+input AddUserInput {
+    nickname: String! @normalise
+    password: String!
+    show_info: Boolean!
+    phone: String @normalise
+    email: String @normalise
+    first_name: String @normalise
+    last_name: String @normalise
+}
+
+input EditUserInput {
+    id: Int
+    nickname: String @normalise
+    password: String
+    show_info: Boolean
+    phone: String @normalise
+    email: String @normalise
+    first_name: String @normalise
+    last_name: String @normalise
+    rank: Int @range(min: 1, max: 10)
+    count_topics: Int @range(min: 0, max: 100000)
+    count_posts: Int @range(min: 0, max: 100000)
+    level: UserLevel
+    restriction: UserRestriction
+}
+
+input UserFilters {
+    ids: [Int!]
+    rank_from: Int
+    rank_to: Int
+    level: UserLevel
+    restriction: UserRestriction
+    count_posts_from: Int
+    count_posts_to: Int
+}
+
+input UserSort {
+    by: UserSortBy!
+    order: SortOrder!
+}
+
+type Query {
+    showUser(id: Int!): User!
+    showUsers(
+        f: UserFilters,
+        p: Pagination,
+        s: UserSort
+    ): [User]
+}
+
+type Mutation {
+    addUser(u: AddUserInput!): User!
+    editUser(u: EditUserInput!): User!
+    deleteUser(id: Int!): Boolean!
+}

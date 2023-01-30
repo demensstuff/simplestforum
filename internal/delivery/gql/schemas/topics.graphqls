@@ -1,0 +1,56 @@
+enum TopicSortBy {
+    SECTION_ID
+    USER_ID
+    COUNT_POSTS
+    CREATED_AT
+}
+
+type Topic {
+    id: Int!
+    section_id: Int!
+    section: Section
+    name: String!
+    user_id: Int!
+    user: User
+    count_posts: Int!
+    posts: [Post]
+    created_at: Time!
+    updated_at: Time!
+}
+
+input AddTopicInput {
+    section_id: Int!
+    name: String! @normalise
+}
+input EditTopicInput {
+    id: Int!
+    user_id: Int
+    section_id: Int
+    name: String @normalise
+}
+
+input TopicFilters {
+    ids: [Int!]
+    user_ids: [Int!]
+    section_ids: [Int!]
+}
+
+input TopicSort {
+    by: TopicSortBy!
+    order: SortOrder! = ASC
+}
+
+extend type Query {
+    showTopic(id: Int!): Topic!
+    showTopics(
+        f: TopicFilters,
+        p: Pagination,
+        s: TopicSort
+    ): [Topic]
+}
+
+extend type Mutation {
+    addTopic(t: AddTopicInput!): Topic!
+    editTopic(t: EditTopicInput!): Topic!
+    deleteTopic(id: Int!): Boolean!
+}

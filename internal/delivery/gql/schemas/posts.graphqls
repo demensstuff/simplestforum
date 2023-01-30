@@ -1,0 +1,55 @@
+enum PostSortBy {
+    TOPIC_ID
+    USER_ID
+    CREATED_AT
+}
+
+type Post {
+    id: Int!
+    text: String!
+    user_id: Int!
+    user: User!
+    topic_id: Int!
+    topic: Topic!
+    created_at: Time!
+    updated_at: Time!
+}
+
+input AddPostInput {
+    topic_id: Int!
+    text: String! @normalise
+}
+
+input EditPostInput {
+    id: Int!
+    text: String @normalise
+    user_id: Int
+    topic_id: Int
+}
+
+input PostFilters {
+    ids: [Int!]
+    user_ids: [Int!]
+    topic_ids: [Int!]
+}
+
+input PostSort {
+    by: PostSortBy!
+    order: SortOrder! = ASC
+}
+
+extend type Query {
+    showPost(id: Int!): Post!
+    showPosts(
+        f: PostFilters,
+        p: Pagination,
+        s: PostSort
+    ): [Post]
+}
+
+extend type Mutation {
+    addPost(p: AddPostInput!): Post!
+    editPost(p: EditPostInput!): Post!
+    deletePost(id: Int!): Boolean!
+}
+

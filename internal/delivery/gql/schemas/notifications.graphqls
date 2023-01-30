@@ -1,0 +1,16 @@
+type Notification {
+    id: Int!
+    user_id: Int!
+    text: String!
+    created_at: Time!
+}
+
+extend type Query {
+    showNotifications(
+        p: Pagination
+    ): [Notification]
+}
+
+extend type Mutation {
+    clearNotifications: Boolean!
+}

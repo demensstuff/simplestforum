@@ -1,0 +1,18 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+scalar Time
+
+directive @range(min: Int! = 3, max: Int! = 64) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+directive @normalise on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
+
+input Pagination {
+    limit: Int! = 20 @range(min: 1, max: 100)
+    page: Int! = 1 @range(min: 1, max: 100)
+}
+
+enum SortOrder {
+    ASC
+    DESC
+}

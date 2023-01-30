@@ -1,0 +1,49 @@
+enum SectionSortBy {
+    COUNT_TOPICS
+    CREATED_AT
+}
+
+type Section {
+    id: Int!
+    name: String!
+    description: String
+    count_topics: Int!
+    topics: [Topic]
+    created_at: Time!
+    updated_at: Time!
+}
+
+input AddSectionInput {
+    name: String! @normalise
+    description: String @normalise
+}
+
+input EditSectionInput {
+    id: Int!
+    name: String @normalise
+    description: String @normalise
+}
+
+input SectionFilters {
+    ids: [Int!]
+}
+
+input SectionSort {
+    by: SectionSortBy!
+    order: SortOrder! = ASC
+}
+
+extend type Query {
+    showSection(id: Int!): Section!
+    showSections(
+        f: SectionFilters,
+        p: Pagination,
+        s: SectionSort
+    ): [Section]
+}
+
+extend type Mutation {
+    addSection(s: AddSectionInput!): Section!
+    editSection(s: EditSectionInput!): Section!
+    deleteSection(id: Int!): Boolean!
+}

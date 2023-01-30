@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  database:
+    container_name: "simplestforum_db"
+    image: "postgres:14.1"
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - db-pq:/var/lib/postgresql/data/
+    ports:
+      - ${DB_PORT}:5432
+      - "5433:5433"
+    restart: on-failure
+    networks:
+      - simplestforum
+
+  backend:
+    container_name: "simplestforum"
+    image: "simplestforum:1.0"
+    environment:
+      - DB_SCHEME=${DB_SCHEME}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    ports:
+      - ${HTTP_PORT}:8080
+    restart: on-failure
+    networks:
+      - simplestforum
+
+networks:
+  simplestforum:
+
+volumes:
+  db-pq:
